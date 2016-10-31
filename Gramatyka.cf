@@ -1,0 +1,77 @@
+comment "//" ;
+comment "/*" "*/" ;
+
+Prog. Program ::= [Decl] [Stmt] ;
+
+EOr.    Exp  ::= Exp "or" Exp1 ;
+EAnd.   Exp1  ::= Exp1 "and" Exp2 ;
+EERel.  Exp2  ::= Exp2 EqRel Exp3 ;
+EORel.  Exp3  ::= Exp3 OrdRel Exp4 ;
+EAdd.   Exp4  ::= Exp4  "+" Exp5 ;
+ESub.   Exp4  ::= Exp4  "-" Exp5 ;
+EMul.   Exp5 ::= Exp5 "*" Exp6 ;
+EDiv.   Exp5 ::= Exp5 "/" Exp6 ;
+EInt.   Exp6 ::= Integer ;
+EVar.   Exp6 ::= Ident ;
+EBool.  Exp6 ::= BBool ;
+EUn.    Exp7 ::= UnOpExp Exp6 ;
+EFun.   Exp8 ::= Ident ParamList;
+ELam.   Exp9 ::= "fn" FormalParamList "=>" Type "{" Program "}";
+
+coercions Exp 9 ;
+
+OGt. OrdRel ::= ">" ;
+OGet. OrdRel ::= ">=" ;
+OLt. OrdRel ::= "<" ;
+OLet. OrdRel ::= "<=" ;
+
+BEq. EqRel ::= "==" ;
+BNeq. EqRel ::= "!=" ;
+
+BTrue. BBool ::= "True" ;
+BFalse. BBool ::= "False" ;
+
+PList. ParamList ::= "(" [Exp] ")" ;
+
+separator Exp "," ;
+
+FList. FormalParamList ::= "(" [Decl] ")" ;
+
+separator Ident "," ;
+
+ASimple. AssignOp ::= "=" ;
+AAdd. AssignOp ::= "+=" ;
+ASub. AssignOp ::= "-=" ;
+AMul. AssignOp ::= "*=" ;
+ADiv. AssignOp ::= "/=" ;
+
+UInc. UnOp ::= "++" ;
+UDec. UnOp ::= "--" ;
+
+WMin.   UnOpExp ::= "-" ;
+WPlus.  UnOpExp ::= "+" ;
+WNot.   UnOpExp ::= "not" ;
+
+SReturn. Stmt ::= "return" Exp ;
+SUnary. Stmt ::= Ident UnOp;
+SAssign. Stmt ::= Ident AssignOp Exp ;
+SIfte. Stmt ::= "if" Exp "then" Stmt "else" Stmt "end";
+SIf. Stmt ::= "if" Exp "then" Stmt "end";
+SWhile. Stmt ::= "while" Exp "do" Stmt ;
+SBlock.  Stmt ::= "{" [Decl] [Stmt] "}" ;
+SPrint. Stmt ::= "print" Exp;
+
+terminator Stmt ";" ;
+
+TInt. Type1 ::= "int" ;
+TBool. Type1 ::= "bool" ;
+TRef. Type ::= Type1 "*";
+TFun. Type ::= [Type1] "=>" Type;
+
+separator Type1 "->" ;
+
+coercions Type 1;
+
+DVar. Decl ::= "var" Ident "::" Type ;
+
+separator Decl ";" ;
