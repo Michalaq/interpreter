@@ -1,7 +1,7 @@
 # Compiling  
 
 ```shell
-make grammar & make
+make grammar && make
 ```
 
 # Usage
